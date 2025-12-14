@@ -125,7 +125,7 @@ if ( ! function_exists('wp_auto_apply_watermark') ) {
             imagedestroy($image);
 
             // Uncomment if you want to prevent re-processing
-            // update_post_meta($attachment_id, WP_AUTO_WATERMARK_META_KEY, time());
+            update_post_meta($attachment_id, WP_AUTO_WATERMARK_META_KEY, time());
 
             return ['success' => true];
 
@@ -180,5 +180,33 @@ if ( ! function_exists('wp_auto_calculate_position') ) {
                     $img_height - $text_height - $padding
                 ];
         }
+    }
+}
+
+if ( ! function_exists('wp_auto_is_auto_watermark_enabled') ) {
+
+    /**
+     * Check if auto watermark on upload is enabled
+     *
+     * @param string $option_name The name of your plugin settings option
+     * @return bool True if enabled, false otherwise
+     */
+    function wp_auto_is_auto_watermark_enabled($option_name = 'wp_auto_watermark_settings') {
+        $settings = get_option($option_name, array());
+        return !empty($settings['auto_watermark_upload']);
+    }
+}
+
+if ( ! function_exists('wp_auto_is_bulk_watermark_enabled') ) {
+
+    /**
+     * Check if Bulk Watermark is enabled
+     *
+     * @param string $option_name The name of your plugin settings option
+     * @return bool True if enabled, false otherwise
+     */
+    function wp_auto_is_bulk_watermark_enabled($option_name = 'wp_auto_watermark_settings') {
+        $settings = get_option($option_name, array());
+        return !empty($settings['bulk_watermark_enabled']);
     }
 }

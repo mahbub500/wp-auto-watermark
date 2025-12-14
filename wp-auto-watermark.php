@@ -30,8 +30,8 @@ use WPAutoWatermark\Admin;
 use WPAutoWatermark\Ajax;
 
 if ( is_admin() ) {
-}
 	new Ajax();
 	new Admin();
+}
 
 

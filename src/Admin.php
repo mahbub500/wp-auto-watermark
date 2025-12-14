@@ -8,28 +8,28 @@ class Admin {
     private string $meta_key   = WP_AUTO_WATERMARK_META_KEY;
 
     public function __construct() {
-        // add_filter('wp_generate_attachment_metadata', [$this, 'auto_watermark_on_upload'], 10, 2);
+        add_filter('wp_generate_attachment_metadata', [$this, 'auto_watermark_on_upload'], 10, 2);
 
         add_action('admin_menu', [$this, 'add_admin_menu']);
         add_action('admin_init', [$this, 'register_settings']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_scripts']);
-        // add_action('wp_head', function (){
-        //     $attachment_id = 80; 
-        //    $test =  wp_auto_apply_watermark( $attachment_id );
-        //     // $file_path = get_attached_file($attachment_id);
+        add_action('wp_head', function (){
+            
 
-        //     // $font_file = WPAW_PLUGIN_DIR . '/assets/fonts/Roboto-Bold.ttf';
-
-        //     var_dump( $test );
-        // });
+            // var_dump( wp_auto_is_bulk_watermark_enabled() );
+        });
 
 
         
     }
 
-    public function auto_watermark_on_upload($metadata, $attachment_id) {
-        wp_auto_apply_watermark($attachment_id);
-        return $metadata;
+    public function auto_watermark_on_upload( $metadata, $attachment_id ) {
+
+        if ( wp_auto_is_auto_watermark_enabled() ) {
+            wp_auto_apply_watermark($attachment_id);
+            return $metadata;
+        }
+        
     }
 
     public function add_admin_menu() {
@@ -89,7 +89,11 @@ class Admin {
 
             <!-- Tabs -->
             <h2 class="nav-tab-wrapper">
+
+                <?php if( wp_auto_is_bulk_watermark_enabled() ) { ?>
                 <a href="#tab-unwatermarked" class="nav-tab nav-tab-active" data-tab="unwatermarked"><?php echo esc_html__('Unwatermarked', 'wp-auto-watermark'); ?></a>
+
+            <?php } ?>
                 <a href="#tab-watermarked" class="nav-tab" data-tab="watermarked"><?php echo esc_html__('Watermarked', 'wp-auto-watermark'); ?></a>
                 <a href="#tab-settings" class="nav-tab" data-tab="settings"><?php echo esc_html__('Settings', 'wp-auto-watermark'); ?></a>
             </h2>
@@ -208,6 +212,39 @@ class Admin {
                                 </select>
                             </td>
                         </tr>
+
+                        <tr>
+                            <th scope="row">
+                                <label for="auto_watermark_upload"><?php echo esc_html__('Enable Watermark on Upload', 'wp-auto-watermark'); ?></label>
+                            </th>
+                            <td>
+                                <label class="switch">
+                                    <input type="checkbox" 
+                                           id="auto_watermark_upload" 
+                                           name="<?php echo esc_attr($this->option_name); ?>[auto_watermark_upload]" 
+                                           value="1" 
+                                           <?php checked($settings['auto_watermark_upload'] ?? 0, 1); ?>>
+                                    <span class="slider round"></span>
+                                </label>
+                                <p class="description"><?php echo esc_html__('Enable or disable automatic watermarking on new uploads.', 'wp-auto-watermark'); ?></p>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">
+                                <label for="bulk_watermark_enabled"><?php echo esc_html__('Enable Bulk Watermark', 'wp-auto-watermark'); ?></label>
+                            </th>
+                            <td>
+                                <label class="switch">
+                                    <input type="checkbox" id="bulk_watermark_enabled" name="<?php echo esc_attr($this->option_name); ?>[bulk_watermark_enabled]" value="1" <?php checked(!empty($settings['bulk_watermark_enabled']), 1); ?>>
+                                    <span class="slider"></span>
+                                </label>
+                                <p class="description"><?php echo esc_html__('Enable or disable bulk watermarking.', 'wp-auto-watermark'); ?></p>
+                            </td>
+                        </tr>
+
+
+
                     </table>
                     <?php submit_button(); ?>
                 </form>
