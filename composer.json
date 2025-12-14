@@ -1,0 +1,15 @@
+{
+    "name": "mahbub/wp-auto-watermark",
+    "description": "Automatically applies watermark text to uploaded images",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "WPAutoWatermark\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "require": {}
+}
