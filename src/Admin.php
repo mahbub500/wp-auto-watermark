@@ -29,7 +29,7 @@ class Admin {
             wp_auto_apply_watermark($attachment_id);
             return $metadata;
         }
-        
+        return $metadata;
     }
 
     public function add_admin_menu() {
@@ -91,7 +91,7 @@ class Admin {
             <h2 class="nav-tab-wrapper">
 
                 <?php if( wp_auto_is_bulk_watermark_enabled() ) { ?>
-                <a href="#tab-unwatermarked" class="nav-tab nav-tab-active" data-tab="unwatermarked"><?php echo esc_html__('Unwatermarked', 'wp-auto-watermark'); ?></a>
+                <a href="#tab-unwatermarked" class="nav-tab " data-tab="unwatermarked"><?php echo esc_html__('Unwatermarked', 'wp-auto-watermark'); ?></a>
 
             <?php } ?>
                 <a href="#tab-watermarked" class="nav-tab" data-tab="watermarked"><?php echo esc_html__('Watermarked', 'wp-auto-watermark'); ?></a>
